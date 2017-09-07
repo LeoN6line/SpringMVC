@@ -37,5 +37,12 @@
 	<classpathentry kind="lib" path="web/WEB-INF/lib/spring-webmvc-3.2.0.RELEASE.jar"/>
 	<classpathentry kind="lib" path="web/WEB-INF/lib/spring-webmvc-portlet-3.2.0.RELEASE.jar"/>
 	<classpathentry kind="lib" path="web/WEB-INF/lib/standard-1.1.2.jar"/>
+	<classpathentry kind="lib" path="web/WEB-INF/lib/jconn3.jar"/>
+	<classpathentry kind="lib" path="web/WEB-INF/lib/poi-3.16.jar"/>
+	<classpathentry kind="lib" path="web/WEB-INF/lib/poi-examples-3.16.jar"/>
+	<classpathentry kind="lib" path="web/WEB-INF/lib/poi-excelant-3.16.jar"/>
+	<classpathentry kind="lib" path="web/WEB-INF/lib/poi-ooxml-3.16.jar"/>
+	<classpathentry kind="lib" path="web/WEB-INF/lib/poi-ooxml-schemas-3.16.jar"/>
+	<classpathentry kind="lib" path="web/WEB-INF/lib/poi-scratchpad-3.16.jar"/>
 	<classpathentry kind="output" path="web/classes"/>
 </classpath>
