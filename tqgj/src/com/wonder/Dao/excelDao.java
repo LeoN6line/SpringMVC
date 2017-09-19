@@ -80,4 +80,24 @@ public static void release(Connection conn,PreparedStatement st,ResultSet rs){
 			 }
 		 }
 	 }
+
+public static void insert(String fileDir, String excelName, String tdate, String status) {
+	// TODO Auto-generated method stub
+	String sql="insert into t_excel(name,date,location,status) values(?,?,?,?)";
+	try {
+		conn=dds.getConnection();
+		pstmt=conn.prepareStatement(sql);
+		pstmt.setString(1, excelName);
+		pstmt.setString(2, tdate);
+		pstmt.setString(3, fileDir);
+		pstmt.setString(4, status);
+		pstmt.executeUpdate();
+		
+		
+	} catch (SQLException e) {
+		e.printStackTrace();
+	} finally{
+		release(conn,pstmt,rs);
+	}
+}
 }

@@ -1,16 +1,17 @@
 package com.wonder.Control;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.wonder.Dao.sybaseDao;
+import com.wonder.Entity.Data;
 import com.wonder.Entity.Excel;
-import com.wonder.Service.DaoService;
+import com.wonder.Service.ExcelService;
+import com.wonder.Service.MySQLDaoService;
+import com.wonder.Service.SybaseDaoService;
 
 
 
@@ -32,11 +33,27 @@ public class gftjController {
 	}
 
 	@RequestMapping("/search")
-	public String Save(@RequestParam(value="date")String date, Model model) throws SQLException { 
+	public String Save(@RequestParam(value="date")String date, Model model) throws Exception { 
 		ArrayList<Excel> elist = new ArrayList<Excel>();
 		String tdate = date.replaceAll("-", "");
-		elist  = DaoService.search(tdate);
-		model.addAttribute("elist", elist);
+		System.out.println(tdate);
+		
+		
+		elist  = MySQLDaoService.search(tdate);
+		System.out.println(elist.isEmpty());
+		if(elist.isEmpty()){
+			String fileDir = "E:/项目工作空间/workspace_javaweb/tqgj/web/excel/"+tdate+"月份的购房统计月报表.xls";
+			String excelName = tdate + "月份的购房统计月报表.xls";
+			String status ="1";
+			boolean isStatus = ExcelService.writeExcel(fileDir,excelName,tdate);
+				if(isStatus)
+					status = "2";
+			MySQLDaoService.insert(fileDir,excelName,tdate,status);
+			elist  = MySQLDaoService.search(tdate);
+		}
+ 		model.addAttribute("elist", elist);
+
+	
 		return "gftj";
 	}
 }
