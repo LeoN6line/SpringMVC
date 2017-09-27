@@ -24,7 +24,7 @@
         maxWait="10000" 
         maxActive="100"
         driverClassName="com.sybase.jdbc3.jdbc.SybDriver"
-        url="jdbc:sybase:Tds:101.101.98.1:4100/tqfront" 
+        url="jdbc:sybase:Tds:101.101.98.1:4100/tqfront?charset=cp936" 
 />
 
 </Context>

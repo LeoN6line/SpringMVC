@@ -40,5 +40,10 @@
 	<classpathentry exported="true" kind="lib" path="web/WEB-INF/lib/poi-ooxml-schemas-3.16.jar"/>
 	<classpathentry exported="true" kind="lib" path="web/WEB-INF/lib/poi-scratchpad-3.16.jar"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
+	<classpathentry kind="lib" path="web/WEB-INF/lib/log4j-1.2.17.jar"/>
+	<classpathentry kind="lib" path="web/WEB-INF/lib/log4jdbc4-1.2.jar"/>
+	<classpathentry kind="lib" path="web/WEB-INF/lib/slf4j-api-1.7.9.jar"/>
+	<classpathentry kind="lib" path="web/WEB-INF/lib/slf4j-log4j12-1.7.9.jar"/>
+	<classpathentry kind="lib" path="web/WEB-INF/lib/jconn2.jar"/>
 	<classpathentry kind="output" path="web/classes"/>
 </classpath>

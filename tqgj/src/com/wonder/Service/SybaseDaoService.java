@@ -68,7 +68,7 @@ public class SybaseDaoService {
 			int i =0;
 			if(city[i].equals("上海市")){
 				i = 1;}
-			for(int j = 0;j<area.length;j++){
+			for(int j = 0;j<1&& j<area.length;j++){
 				Map<String,String> map = new HashMap<String,String>();
 				if(area[j].equals("市辖区"))
 					i++;
@@ -76,28 +76,28 @@ public class SybaseDaoService {
 				try {
 					data = sybaseDao.search(province,city[i-1], area[j], tdate);
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				}
 				Data data2 = null;
 				try {
-					data2 = sybaseDao.search(province,city[i-1], area[j], YDate(tdate));
+					data2 = sybaseDao.searchYDate(province,city[i-1], area[j], YDate(tdate));
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				}
 				Data data3 = null;
 				try {
 					data3 = sybaseDao.search(province,city[i-1], area[j], MDate(tdate));
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				}
 				Data data4 = null;
 				try {
 					data4 = sybaseDao.search(province,city[i-1], area[j], MDate(MDate(tdate)));
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				}
 				countSum += data.getCount();
@@ -117,13 +117,24 @@ public class SybaseDaoService {
 				maplist.add(map);
 				System.out.println(city[i-1]+area[j]+"数据查找完成！");
 			}
-
+			Map<String,String> lastmap =new HashMap<String,String>();
+			lastmap.put("市", "");
+			lastmap.put("区县", "总计");
+			lastmap.put("笔数", Integer.toString(countSum));
+			lastmap.put("金额", Integer.toString(mSum));
+			lastmap.put("去年同月", Integer.toString(countSum2));
+			lastmap.put("上个月", Integer.toString(countSum3));
+			lastmap.put("上上个月", Integer.toString(countSum4));
+			lastmap.put("同比", function(countSum,countSum2));
+			lastmap.put("环比", function(countSum,countSum3));
+			maplist.add(lastmap);
+			System.out.println("总计已经输出！");
 		}
 	
-	
-	public static String YDate(String date) throws ParseException{
+	//去年同月
+	public static String YDate(String tdate) throws ParseException{
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM"); 
-		Date ddate = sdf.parse(date);
+		Date ddate = sdf.parse(tdate);
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(ddate);
 		//        calendar.add(Calendar.WEEK_OF_YEAR, -1);
@@ -132,10 +143,10 @@ public class SybaseDaoService {
 		String ydate = sdf.format(sdate).toString();
 		 return ydate;
 	}
-	
-	public static String MDate(String date) throws ParseException{
+	//同年上月
+	public static String MDate(String tdate) throws ParseException{
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM"); 
-		Date ddate = sdf.parse(date);
+		Date ddate = sdf.parse(tdate);
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(ddate);
 		//        calendar.add(Calendar.WEEK_OF_YEAR, -1);

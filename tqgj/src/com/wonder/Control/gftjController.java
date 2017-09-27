@@ -51,9 +51,10 @@ public class gftjController {
 			MySQLDaoService.insert(fileDir,excelName,tdate,status);
 			elist  = MySQLDaoService.search(tdate);
 		}
+		String label = "serach succeed!";
  		model.addAttribute("elist", elist);
-
+ 		model.addAttribute("label",label);
 	
-		return "gftj";
+		return "gftj" ;
 	}
 }

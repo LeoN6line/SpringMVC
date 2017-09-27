@@ -67,7 +67,7 @@
 	<!-- 		<input class="easyui-textbox" data-options="multiline:true" value="暂时没有运行信息..." style="width:497px;height:260px;border:0;" disabled = "disabled"> -->
 	</div>
 	<div id = "message" style="width:100%;height:100%;border:0;margin-Top:10px;margin-Left:5px">
-		暂时没有运行信息...
+		
 		</div>
 </div>
 </form>

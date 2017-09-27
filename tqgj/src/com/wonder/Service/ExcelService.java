@@ -168,6 +168,7 @@ public class ExcelService {
 				}
 			}
 		}
+		
 			out = new FileOutputStream(fileDir);
 			workbook.write(out);
 		} catch (Exception e) {
@@ -195,10 +196,10 @@ public class ExcelService {
 		// TODO Auto-generated method stub
 		boolean isExist = fileExist(fileDir);
 		if(!isExist){
-		String provinces[] ={"上海市","江苏省","浙江省","安徽省","山东省","福建省","江西省"};
+		String provinces[] ={"上海","江苏省","浙江省","安徽省","山东省","福建省","江西省"};
 		String titleRow[] ={"市","区县","笔数","金额","去年同月","上个月","上上个月","同比","环比"}; 
 		createExcel(fileDir, provinces, titleRow);
-			for(int i = 0 ; i < 7;i++){
+			for(int i = 0 ; i<=0 && i < 7;i++){
 			String province =provinces[i];
 			String sheetName = province+"各区县购房提取情况";
 			List<Map> maplist = SybaseDaoService.getData(province,tdate);

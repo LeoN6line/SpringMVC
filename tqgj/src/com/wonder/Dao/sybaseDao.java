@@ -2,27 +2,17 @@ package com.wonder.Dao;
 
 	import java.io.IOException;
 import java.sql.Connection;
-	import java.sql.DriverManager;
 	import java.sql.PreparedStatement;
 	import java.sql.ResultSet;
 	import java.sql.SQLException;
-	import java.sql.Statement;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
+	import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import javax.naming.Context;
 	import javax.naming.InitialContext;
 	import javax.naming.NamingException;
-	import javax.sql.DataSource;
-
 	import com.alibaba.druid.pool.DruidDataSource;
 import com.wonder.Entity.Data;
-import com.wonder.Entity.Excel;
 
 	public class sybaseDao {
 		private static final String SYBASE_DB_JNDINAME="java:comp/env/jdbc/mysybaseds";
@@ -39,29 +29,67 @@ import com.wonder.Entity.Excel;
 				 e.printStackTrace();
 			 }
 		 }	
-		public static Data search(String province,String city,String area,String date) throws IOException {
-//			String sql = "select ?,?,?,?,?, COUNT(DISTINCT B.TRANS_NUM) ,SUM(B.HAPPEN_AMOUNT) from HOUSE_INFO  A, TRANS_MONTH B    where  A.TRANS_NUM=B.TRANS_NUM  AND  substring(B.TRANS_HAPPEN_TIME,1,6)=?   AND B.ERROR_TYPE ='00'AND SUBSTRING(B.TRANS_TYPE, 3,1) ='3'  and  A.HOUSE_ADD  like  ?   and  A.HOUSE_ADD like ?";
-//			String sql = "select * from HOUSE_INFO where ZM_CODE =' 0124507'";
+		public static Data search(String province,String city,String area,String tdate) throws IOException {
+			time();	
+			String sql =null;
+			String home_add = null;
+			Data data =null;
+			try {
+				conn=dds.getConnection();
+			if(province=="上海"){
+				home_add ="%"+area;
+				sql = "select COUNT(DISTINCT B.TRANS_NUM) ,SUM(B.HAPPEN_AMOUNT)  from house_address_detail A,TRANS_MONTH B where A.trans_num=B.TRANS_NUM AND substring(B.TRANS_HAPPEN_TIME,1,6)= ? AND B.ERROR_TYPE ='00' AND SUBSTRING(B.TRANS_TYPE, 3,1)='3' and A.status='0' and A.province LIKE ? and  A.area LIKE ? ";
+				pstmt=conn.prepareStatement(sql);
+				pstmt.setString(1,tdate);
+				pstmt.setString(2,province+"%");
+				pstmt.setString(3,home_add+"%");
+			}else{
+			home_add = province+city+area;
+			sql = "select COUNT(DISTINCT B.TRANS_NUM),SUM(B.HAPPEN_AMOUNT) from HOUSE_INFO A,TRANS_MONTH B where A.TRANS_NUM=B.TRANS_NUM AND substring(B.TRANS_HAPPEN_TIME,1,6)= ?  AND B.ERROR_TYPE='00' AND SUBSTRING(B.TRANS_TYPE,3,1) ='3' and A.HOUSE_ADD like ? ";
+			pstmt=conn.prepareStatement(sql);
+			pstmt.setString(1,tdate);
+			pstmt.setString(2,home_add+"%");
+			}
+			
+
+				
+//				pstmt=conn.prepareStatement(sql);
+//				pstmt.setString(1,tdate);
+//				pstmt.setString(2,home_add+"%");
+				rs = pstmt.executeQuery();
+				while(rs.next()){
+					data =new Data();
+					data.setCount(rs.getInt(1));
+					data.setSum(rs.getInt(2));
+					System.out.println(rs.getInt(1));
+					System.out.println(rs.getInt(2));
+			}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}finally{
+				release(conn,pstmt,rs);
+				System.out.println("DONE!");
+			}
+			return data;
+		}
+
+		public static Data searchYDate(String province,String city,String area,String tdate) throws IOException {
 			time();	
 			String home_add = province+city+area;
-			String sql = "select COUNT(DISTINCT B.TRANS_NUM),SUM(B.HAPPEN_AMOUNT) from HOUSE_INFO A,TRANS_MONTH B where A.TRANS_NUM=B.TRANS_NUM AND substring(B.TRANS_HAPPEN_TIME,1,6)=?  AND B.ERROR_TYPE='00' AND SUBSTRING(B.TRANS_TYPE,3,1) ='3' and A.HOUSE_ADD like ? ";
-			Data data =new Data();
+			String sql = "select COUNT(DISTINCT B.TRANS_NUM),SUM(B.HAPPEN_AMOUNT) from HOUSE_INFO A,TRANS_HIS B where A.TRANS_NUM=B.TRANS_NUM AND substring(B.TRANS_HAPPEN_TIME,1,6)= ?  AND B.ERROR_TYPE='00' AND SUBSTRING(B.TRANS_TYPE,3,1) ='3' and A.HOUSE_ADD like ? ";
+			Data data =null;
 			try {
 				conn=dds.getConnection();
 				pstmt=conn.prepareStatement(sql);
-//				pstmt.setInt(1, i);
-//				pstmt.setString(2, date);
-//				pstmt.setString(3, province);
-//				pstmt.setString(4, city);
-//				pstmt.setString(5, area);
-//				pstmt.setString(6, date);
-				pstmt.setString(1, date);
-				pstmt.setString(2, home_add+"%");
-//				pstmt.setString(3, "%"+area+"%");
+				pstmt.setString(1,tdate);
+				pstmt.setString(2,home_add+"%");
 				rs = pstmt.executeQuery();
 				while(rs.next()){
+					data =new Data();
 					data.setCount(rs.getInt(1));
 					data.setSum(rs.getInt(2));
+					System.out.println(rs.getInt(1));
+					System.out.println(rs.getInt(2));
 			}
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -71,7 +99,6 @@ import com.wonder.Entity.Excel;
 			return data;
 		}
 
-	
 		
 		/*
 		 * 释放连接
